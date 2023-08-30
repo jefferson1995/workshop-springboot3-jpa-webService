@@ -1,10 +1,14 @@
 package com.barbosaprojects.course.entities;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.io.Serializable;
 import java.time.Instant;
 import java.util.Objects;
+
+import static com.fasterxml.jackson.annotation.JsonFormat.Shape.STRING;
 
 
 @Entity
@@ -19,6 +23,7 @@ public class Order implements Serializable {
     private Instant moment;
 
 
+
     @ManyToOne
     @JoinColumn(name = "client_id")
     private User client;
@@ -29,6 +34,7 @@ public class Order implements Serializable {
 
     public Order(Long id, Instant moment, User client) {
         this.id = id;
+
         this.moment = moment;
         this.client = client;
     }
