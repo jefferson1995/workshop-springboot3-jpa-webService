@@ -1,6 +1,7 @@
 package com.barbosaprojects.course.entities;
 
 import com.barbosaprojects.course.entities.pk.OrderItemPK;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
@@ -15,7 +16,7 @@ public class OrderItem implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @EmbeddedId
-    private OrderItemPK id;
+    private OrderItemPK id = new OrderItemPK();
 
     private Integer quantity;
     private Double price;
@@ -34,6 +35,8 @@ public class OrderItem implements Serializable {
     /*
         Precisa criar o getter and setter manualmente dos ids
      */
+
+    @JsonIgnore  //Esse get chama o item de pedido associado
     public Order getOrder(){
         return id.getOrder();
     }
@@ -42,7 +45,7 @@ public class OrderItem implements Serializable {
         id.setOrder(order);
     }
 
-    public Product productOrder(){
+    public Product getProduct(){
         return id.getProduct();
     }
 

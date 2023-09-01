@@ -1,14 +1,8 @@
 package com.barbosaprojects.course.config;
 
-import com.barbosaprojects.course.entities.Category;
-import com.barbosaprojects.course.entities.Order;
-import com.barbosaprojects.course.entities.Product;
+import com.barbosaprojects.course.entities.*;
 import com.barbosaprojects.course.entities.enums.OrderStatus;
-import com.barbosaprojects.course.repositories.CategoryRepository;
-import com.barbosaprojects.course.repositories.OrderRepository;
-import com.barbosaprojects.course.repositories.ProductRepository;
-import com.barbosaprojects.course.repositories.UserRepository;
-import com.barbosaprojects.course.entities.User;
+import com.barbosaprojects.course.repositories.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Configuration;
@@ -35,20 +29,13 @@ public class TestConfig implements CommandLineRunner {
     @Autowired
     ProductRepository productRepository;
 
+    @Autowired
+    private OrderItemRepository orderItemRepository;
+
     //Tudo que está dentro será executado quando a aplicação for iniciada.
     @Override
     public void run(String... args) throws Exception {
 
-        User u1 = new User(null, "Maria Brown", "maria@gmail.com", "988888888", "123456");
-        User u2 = new User(null, "Alex Green", "alex@gmail.com", "977777777", "123456");
-
-        userRepository.saveAll(Arrays.asList(u1, u2)); //Salva uma lista no BD.
-
-        Order o1 = new Order(null, Instant.parse("2019-06-20T19:53:07Z"), OrderStatus.PAID, u1);
-        Order o2 = new Order(null, Instant.parse("2019-07-21T03:42:10Z"), OrderStatus.WAITING_PAYMENT, u2);
-        Order o3 = new Order(null, Instant.parse("2019-07-22T15:21:22Z"), OrderStatus.WAITING_PAYMENT, u1);
-
-        orderRepository.saveAll(Arrays.asList(o1,o2,o3));
 
         Category cat1 = new Category(null, "Electronics");
         Category cat2 = new Category(null, "Books");
@@ -63,7 +50,6 @@ public class TestConfig implements CommandLineRunner {
         Product p4 = new Product(null, "PC Gamer", "Donec aliquet odio ac rhoncus cursus.", 1200.0, "");
         Product p5 = new Product(null, "Rails for Dummies", "Cras fringilla convallis sem vel faucibus.", 100.99, "");
 
-        productRepository.saveAll(Arrays.asList(p1,p2,p3,p4,p5));
 
         //faz o relacionamento para salvar no BD
         p1.getCategories().add(cat2);
@@ -74,6 +60,25 @@ public class TestConfig implements CommandLineRunner {
         p5.getCategories().add(cat2);
 
         productRepository.saveAll(Arrays.asList(p1,p2,p3,p4,p5));
+
+
+        User u1 = new User(null, "Maria Brown", "maria@gmail.com", "988888888", "123456");
+        User u2 = new User(null, "Alex Green", "alex@gmail.com", "977777777", "123456");
+
+        userRepository.saveAll(Arrays.asList(u1, u2)); //Salva uma lista no BD.
+
+        Order o1 = new Order(null, Instant.parse("2019-06-20T19:53:07Z"), OrderStatus.PAID, u1);
+        Order o2 = new Order(null, Instant.parse("2019-07-21T03:42:10Z"), OrderStatus.WAITING_PAYMENT, u2);
+        Order o3 = new Order(null, Instant.parse("2019-07-22T15:21:22Z"), OrderStatus.WAITING_PAYMENT, u1);
+
+        orderRepository.saveAll(Arrays.asList(o1,o2,o3));
+
+        OrderItem oi1 = new OrderItem(o1, p1, 2, p1.getPrice());
+        OrderItem oi2 = new OrderItem(o1, p3, 1, p3.getPrice());
+        OrderItem oi3 = new OrderItem(o2, p3, 2, p3.getPrice());
+        OrderItem oi4 = new OrderItem(o3, p5, 2, p5.getPrice());
+
+        orderItemRepository.saveAll(Arrays.asList(oi1,oi2,oi3,oi4));
 
 
 
