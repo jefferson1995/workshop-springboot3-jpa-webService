@@ -15,7 +15,7 @@ import static com.fasterxml.jackson.annotation.JsonFormat.Shape.STRING;
 
 
 @Entity
-@Table(name="tb_order")
+@Table(name = "tb_order")
 public class Order implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -27,7 +27,6 @@ public class Order implements Serializable {
     private Integer orderStatus;
 
 
-
     @ManyToOne
     @JoinColumn(name = "client_id")
     private User client;
@@ -35,7 +34,12 @@ public class Order implements Serializable {
     @OneToMany(mappedBy = "id.order") //-> Porque no ordemItem tem o id e por sua vez ele que tem o pedido
     private Set<OrderItem> items = new HashSet<>();
 
-    public Order(){
+
+    //No caso 1=1 está mapeando para classe payment ter o mesmo id
+    @OneToOne(mappedBy = "order", cascade = CascadeType.ALL)
+    private Payment payment;
+
+    public Order() {
 
     }
 
@@ -70,7 +74,7 @@ public class Order implements Serializable {
     }
 
     public void setOrderStatus(OrderStatus orderStatus) {
-        if(orderStatus != null){
+        if (orderStatus != null) {
             this.orderStatus = orderStatus.getCode();
         }
 
@@ -84,9 +88,18 @@ public class Order implements Serializable {
         this.client = client;
     }
 
+    public Payment getPayment() {
+        return payment;
+    }
+
+    public void setPayment(Payment payment) {
+        this.payment = payment;
+    }
+
     public Set<OrderItem> getItems() {
         return items;
     }
+
 
     @Override
     public boolean equals(Object o) {
