@@ -32,4 +32,19 @@ public class UserService {
         userRepository.deleteById(id);
     }
 
+    public User update(Long id, User obj){
+        User entity = userRepository.getReferenceById(id); //Traz o objeto monitorado
+        updateData(entity, obj);
+        return userRepository.save(entity);
+
+    }
+
+    //Método auxiliar para atualizar o user
+    private void updateData(User entity, User obj) {
+        entity.setName(obj.getName());
+        entity.setEmail(obj.getEmail());
+        entity.setPhone(obj.getPhone());
+
+    }
+
 }
