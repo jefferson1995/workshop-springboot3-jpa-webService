@@ -4,6 +4,7 @@ import com.barbosaprojects.course.entities.User;
 import com.barbosaprojects.course.repositories.UserRepository;
 import com.barbosaprojects.course.services.exceptions.DatabaseException;
 import com.barbosaprojects.course.services.exceptions.ResourceNotFoundException;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -44,9 +45,15 @@ public class UserService {
     }
 
     public User update(Long id, User obj){
-        User entity = userRepository.getReferenceById(id); //Traz o objeto monitorado
-        updateData(entity, obj);
-        return userRepository.save(entity);
+        try {
+            User entity = userRepository.getReferenceById(id); //Traz o objeto monitorado
+            updateData(entity, obj);
+            return userRepository.save(entity);
+        }catch (EntityNotFoundException e){
+            //e.printStackTrace(); para verificar qual exceção é lançada e criar o tratamento - tem que usar com RuntimeExeption
+            throw new ResourceNotFoundException(id);
+        }
+
 
     }
 
