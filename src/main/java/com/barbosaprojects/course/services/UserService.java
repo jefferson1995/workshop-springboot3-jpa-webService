@@ -50,6 +50,7 @@ public class UserService {
             updateData(entity, obj);
             return userRepository.save(entity);
         }catch (EntityNotFoundException e){
+            //No caso precisa colocar o RuntimeException e para rodar o printStack
             //e.printStackTrace(); para verificar qual exceção é lançada e criar o tratamento - tem que usar com RuntimeExeption
             throw new ResourceNotFoundException(id);
         }
